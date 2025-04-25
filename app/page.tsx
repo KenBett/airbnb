@@ -5,7 +5,7 @@ import EmptyState from "@/components/EmptyState";
 import ListingCard from "@/components/listings/ListingCard";
 
 interface HomeProps {
-  searchParams: Promise<IListingParams>;
+  searchParams: IListingParams;
 }
 
 export default async function Home({ searchParams }: HomeProps) {

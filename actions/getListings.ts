@@ -11,7 +11,7 @@ export interface IListingParams {
   locationValue?: string;
   category?: string;
 }
-export default async function getListings(params: Promise<IListingParams>) {
+export default async function getListings(params: IListingParams) {
   try {
     const {
       userId,
@@ -22,7 +22,7 @@ export default async function getListings(params: Promise<IListingParams>) {
       startDate,
       endDate,
       category,
-    } = await params;
+    } = params;
 
     let query: any = {};
 
@@ -31,25 +31,25 @@ export default async function getListings(params: Promise<IListingParams>) {
     }
 
     if (category) {
-      query.category = category
+      query.category = category;
     }
 
     if (roomCount) {
       query.roomCount = {
-        gte: +roomCount
-      }
+        gte: +roomCount,
+      };
     }
 
     if (guestCount) {
       query.guestCount = {
-        gte: +guestCount
-      }
+        gte: +guestCount,
+      };
     }
 
     if (bathroomCount) {
       query.bathroomCount = {
-        gte: +bathroomCount
-      }
+        gte: +bathroomCount,
+      };
     }
 
     if (locationValue) {
@@ -67,12 +67,12 @@ export default async function getListings(params: Promise<IListingParams>) {
               },
               {
                 startDate: { lte: endDate },
-                endDate: { gte: endDate }
-              }
-            ]
-          }
-        }
-      }
+                endDate: { gte: endDate },
+              },
+            ],
+          },
+        },
+      };
     }
     const listings = await prisma.listing.findMany({
       where: query,
