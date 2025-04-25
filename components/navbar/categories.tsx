@@ -3,13 +3,23 @@
 
 import { TbBeach, TbMountain, TbPool } from "react-icons/tb";
 import Container from "../container";
-import { GiBarn, GiBoatFishing, GiCactus, GiCastle, GiCaveEntrance, GiForestCamp, GiIsland, GiWindmill } from "react-icons/gi";
+import {
+  GiBarn,
+  GiBoatFishing,
+  GiCactus,
+  GiCastle,
+  GiCaveEntrance,
+  GiForestCamp,
+  GiIsland,
+  GiWindmill,
+} from "react-icons/gi";
 import { MdOutlineVilla } from "react-icons/md";
 import CategoryBox from "../categoryBox";
 import { usePathname, useSearchParams } from "next/navigation";
 import { FaSkiing } from "react-icons/fa";
 import { BsSnow } from "react-icons/bs";
 import { IoDiamond } from "react-icons/io5";
+import { Suspense } from "react";
 
 export const categories = [
   {
@@ -89,7 +99,7 @@ export const categories = [
   },
 ];
 
-const Categories = () => {
+const CategoriesContent = () => {
   const params = useSearchParams();
   const category = params?.get("category");
   const pathname = usePathname();
@@ -115,4 +125,19 @@ const Categories = () => {
     </Container>
   );
 };
+
+const Categories = () => {
+  return (
+    <Suspense
+      fallback={
+        <Container>
+          <div className="pt-4 flex flex-row items-center justify-between overflow-x-auto animate-pulse" />
+        </Container>
+      }
+    >
+      <CategoriesContent />
+    </Suspense>
+  );
+};
+
 export default Categories;
