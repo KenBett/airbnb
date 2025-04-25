@@ -3,7 +3,7 @@
 
 import useSearchModal from "@/hooks/useSearchModal";
 import qs from "query-string";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState, Suspense } from "react";
 import Modal from "./modal";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Range } from "react-date-range";
@@ -30,7 +30,7 @@ interface SearchQueryParams {
   [key: string]: string | number | undefined;
 }
 
-const SearchModal = () => {
+const SearchModalContent = () => {
   const router = useRouter();
   const params = useSearchParams();
   const searchModal = useSearchModal();
@@ -201,6 +201,14 @@ const SearchModal = () => {
       onClose={searchModal.onClose}
       body={bodyContent}
     />
+  );
+};
+
+const SearchModal = () => {
+  return (
+    <Suspense fallback={<div className="animate-pulse">Loading...</div>}>
+      <SearchModalContent />
+    </Suspense>
   );
 };
 
