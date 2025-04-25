@@ -1,7 +1,6 @@
 // @\app\favorites\page.tsx
 import EmptyState from "@/components/EmptyState"
 import getCurrentUser from "@/actions/getCurrentUser"
-import getFavorites from "@/actions/getFavoriteListings"
 import getFavoriteListings from "@/actions/getFavoriteListings"
 import FavoriteClient from "@/components/favorites/FavoriteClient"
 export default async function Page(){

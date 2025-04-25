@@ -1,21 +1,43 @@
 // @\components\inputs\ImageUpload.tsx
 "use client";
-import { CldUploadWidget } from "next-cloudinary";
+import {
+  CldUploadWidget,
+  CloudinaryUploadWidgetResults,
+} from "next-cloudinary";
 import Image from "next/image";
 import { useCallback } from "react";
 import { TbPhotoPlus } from "react-icons/tb";
 
 declare global {
-  var cloudinary: any;
+  const cloudinary: {
+    openUploadWidget: (
+      options: any,
+      callback: (error: Error | null, result: any) => void
+    ) => void;
+  };
 }
+
 interface ImageUploadProps {
   onChange: (value: string) => void;
   value: string;
 }
+
+interface CloudinaryUploadResult {
+  info: {
+    secure_url: string;
+  };
+}
+
 const ImageUpload: React.FC<ImageUploadProps> = ({ onChange, value }) => {
   const handleUpload = useCallback(
-    (result: any) => {
-      onChange(result.info.secure_url);
+    (result: CloudinaryUploadWidgetResults) => {
+      if (
+        result.info &&
+        typeof result.info === "object" &&
+        "secure_url" in result.info
+      ) {
+        onChange(result.info.secure_url);
+      }
     },
     [onChange]
   );

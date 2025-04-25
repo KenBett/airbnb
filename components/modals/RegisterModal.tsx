@@ -5,7 +5,6 @@ import { AiFillGithub } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import { useState, useCallback } from "react";
 import {
-  FieldValue,
   FieldValues,
   SubmitHandler,
   useForm,
@@ -43,7 +42,7 @@ const RegisterModal = () => {
       .then(() => {
         registerModal.onClose();
       })
-      .catch((error) => {
+      .catch(() => {
         toast.error("Something went wrong");
       })
       .finally(() => {

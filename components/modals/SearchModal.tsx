@@ -19,8 +19,18 @@ enum STEPS {
   DATE = 1,
   INFO = 2,
 }
-interface SearchModalProps {}
-const SearchModal: React.FC<SearchModalProps> = ({}) => {
+
+interface SearchQueryParams {
+  locationValue?: string;
+  guestCount: number;
+  roomCount: number;
+  bathroomCount: number;
+  startDate?: string;
+  endDate?: string;
+  [key: string]: any; // Allow for other query params that might exist in currentQuery
+}
+
+const SearchModal = () => {
   const router = useRouter();
   const params = useSearchParams();
   const searchModal = useSearchModal();
@@ -41,7 +51,7 @@ const SearchModal: React.FC<SearchModalProps> = ({}) => {
       dynamic(() => import("../map"), {
         ssr: false,
       }),
-    [location]
+    []
   );
 
   const onBack = useCallback(() => {
@@ -62,7 +72,7 @@ const SearchModal: React.FC<SearchModalProps> = ({}) => {
       currentQuery = qs.parse(params.toString());
     }
 
-    const updatedQuery: any = {
+    const updatedQuery: SearchQueryParams = {
       ...currentQuery,
       locationValue: location?.value,
       guestCount,
@@ -140,42 +150,39 @@ const SearchModal: React.FC<SearchModalProps> = ({}) => {
         <Heading
           title="When do you plan to go?"
           subTitle="Make sure everyone is free"
-         />
-         <Calendar
+        />
+        <Calendar
           value={dateRange}
           onChange={(value) => setDateRange(value.selection)}
-          />
+        />
       </div>
-    )
+    );
   }
 
   if (step === STEPS.INFO) {
     bodyContent = (
       <div className="flex flex-col gap-8">
-        <Heading
-          title="More information"
-          subTitle="Find your perfect place"
-         />
-         <Counter
+        <Heading title="More information" subTitle="Find your perfect place" />
+        <Counter
           title="Guest"
           subTitle="How many guests are coming"
           value={guestCount}
           onChange={(value) => setGuestCount(value)}
-          />
-         <Counter
+        />
+        <Counter
           title="Rooms"
           subTitle="How many room do you need"
           value={roomCount}
           onChange={(value) => setRoomCount(value)}
-          />
-         <Counter
+        />
+        <Counter
           title="Bathroom"
           subTitle="How many bathrooms do you need"
           value={bathroomCount}
           onChange={(value) => setBathroomCount(value)}
-          />
+        />
       </div>
-    )
+    );
   }
   return (
     <Modal

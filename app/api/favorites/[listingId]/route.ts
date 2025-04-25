@@ -23,7 +23,7 @@ export async function POST(
     throw new Error('Invalid Id')
   }
   
-  let favoriteIds = [ ...(currenUser.favoriteIds || [])];
+  const favoriteIds = [ ...(currenUser.favoriteIds || [])];
 
   favoriteIds.push(listingId)
 

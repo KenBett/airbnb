@@ -3,8 +3,7 @@
 
 import Loader from "@/components/Loader";
 
-interface LoadingProps {};
-const Loading: React.FC<LoadingProps> = ({  }) => {
+const Loading = () => {
   
   return (
     <Loader />

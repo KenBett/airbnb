@@ -1,6 +1,6 @@
 // @\components\trips\PropertyClient.tsx
 "use client";
-import { safeListing, SafeReservation, SafeUser } from "@/types";
+import { safeListing,  SafeUser } from "@/types";
 import Container from "../container";
 import Heading from "../heading";
 import { useRouter } from "next/navigation";

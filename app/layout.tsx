@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import { Nunito, Roboto, Inter } from "next/font/google";
+import {  Roboto } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar/navbar";
-import Modal from "@/components/modals/modal";
 import RegisterModal from "@/components/modals/RegisterModal";
 import ToasterProvider from "@/providers/ToasterProvider";
 import LoginModal from "@/components/modals/LoginModal";

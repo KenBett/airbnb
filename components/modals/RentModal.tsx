@@ -16,7 +16,6 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
-
 enum STEPS {
   CATEGORY = 0,
   LOCATION = 1,
@@ -31,7 +30,7 @@ const RentModal = () => {
   const rentModal = useRentModal();
   const [step, setStep] = useState(STEPS.CATEGORY);
   const [loading, setLoading] = useState<boolean>(false);
-  
+
   const {
     register,
     handleSubmit,
@@ -52,22 +51,25 @@ const RentModal = () => {
       description: "",
     },
   });
-  
+
   const category = watch("category");
   const location = watch("location");
   const guestCount = watch("guestCount");
   const roomCount = watch("roomCount");
   const bathroomCount = watch("bathroomCount");
   const imageSrc = watch("imageSrc");
-  
+
   const Map = useMemo(
     () =>
       dynamic(() => import("../map"), {
         ssr: false,
       }),
-    [location]
+    []
   );
-  const setCustomValue = (id: string, value: any) => {
+  const setCustomValue = (
+    id: string,
+    value: string | number | null | { latlng: number[] }
+  ) => {
     setValue(id, value, {
       shouldDirty: true,
       shouldTouch: true,
