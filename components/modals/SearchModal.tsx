@@ -27,7 +27,7 @@ interface SearchQueryParams {
   bathroomCount: number;
   startDate?: string;
   endDate?: string;
-  [key: string]: any; // Allow for other query params that might exist in currentQuery
+  [key: string]: string | number | undefined;
 }
 
 const SearchModal = () => {
@@ -67,18 +67,22 @@ const SearchModal = () => {
       return onNext();
     }
 
-    let currentQuery = {};
-    if (params) {
-      currentQuery = qs.parse(params.toString());
-    }
-
-    const updatedQuery: SearchQueryParams = {
-      ...currentQuery,
-      locationValue: location?.value,
+    let currentQuery: SearchQueryParams = {
       guestCount,
       roomCount,
       bathroomCount,
     };
+
+    if (params) {
+      const paramsObj = Object.fromEntries(params.entries());
+      currentQuery = { ...currentQuery, ...paramsObj };
+    }
+
+    const updatedQuery: SearchQueryParams = { ...currentQuery };
+
+    if (location?.value) {
+      updatedQuery.locationValue = location.value;
+    }
 
     if (dateRange.startDate) {
       updatedQuery.startDate = formatISO(dateRange.startDate);
@@ -98,7 +102,6 @@ const SearchModal = () => {
 
     setStep(STEPS.LOCATION);
     searchModal.onClose();
-
     router.push(url);
   }, [
     step,
@@ -132,14 +135,14 @@ const SearchModal = () => {
   let bodyContent = (
     <div className="flex flex-col gap-8">
       <Heading
-        title="Where do you want to go"
-        subTitle="Find the perfect location"
+        title="Where do you wanna go?"
+        subTitle="Find the perfect location!"
       />
       <CountrySelect
         value={location}
         onChange={(value) => setLocation(value as CountrySelectValue)}
       />
-      <hr className="border-neutral-200" />
+      <hr />
       <Map center={location?.latlng} />
     </div>
   );
@@ -149,11 +152,11 @@ const SearchModal = () => {
       <div className="flex flex-col gap-8">
         <Heading
           title="When do you plan to go?"
-          subTitle="Make sure everyone is free"
+          subTitle="Make sure everyone is free!"
         />
         <Calendar
-          value={dateRange}
           onChange={(value) => setDateRange(value.selection)}
+          value={dateRange}
         />
       </div>
     );
@@ -162,39 +165,43 @@ const SearchModal = () => {
   if (step === STEPS.INFO) {
     bodyContent = (
       <div className="flex flex-col gap-8">
-        <Heading title="More information" subTitle="Find your perfect place" />
+        <Heading title="More information" subTitle="Find your perfect place!" />
         <Counter
-          title="Guest"
-          subTitle="How many guests are coming"
-          value={guestCount}
           onChange={(value) => setGuestCount(value)}
+          value={guestCount}
+          title="Guests"
+          subTitle="How many guests are coming?"
         />
+        <hr />
         <Counter
-          title="Rooms"
-          subTitle="How many room do you need"
-          value={roomCount}
           onChange={(value) => setRoomCount(value)}
+          value={roomCount}
+          title="Rooms"
+          subTitle="How many rooms do you need?"
         />
+        <hr />
         <Counter
-          title="Bathroom"
-          subTitle="How many bathrooms do you need"
-          value={bathroomCount}
           onChange={(value) => setBathroomCount(value)}
+          value={bathroomCount}
+          title="Bathrooms"
+          subTitle="How many bathrooms do you need?"
         />
       </div>
     );
   }
+
   return (
     <Modal
       isOpen={searchModal.isOpen}
-      onClose={searchModal.onClose}
-      onSubmit={onSubmit}
       title="Filters"
       actionLabel={actionLabel}
-      secondaryAction={step === STEPS.LOCATION ? undefined : onBack}
+      onSubmit={onSubmit}
       secondaryActionLabel={secondaryActionLabel}
+      secondaryAction={step === STEPS.LOCATION ? undefined : onBack}
+      onClose={searchModal.onClose}
       body={bodyContent}
     />
   );
 };
+
 export default SearchModal;

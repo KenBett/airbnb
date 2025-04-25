@@ -1,18 +1,19 @@
-// @\components\inputs\ImageUpload.tsx
 "use client";
 import {
   CldUploadWidget,
   CloudinaryUploadWidgetResults,
+  type CloudinaryUploadWidgetOptions, // ✅ Import the correct type
 } from "next-cloudinary";
 import Image from "next/image";
 import { useCallback } from "react";
 import { TbPhotoPlus } from "react-icons/tb";
 
+// If you need to declare it globally (e.g., for `cloudinary.openUploadWidget`)
 declare global {
   const cloudinary: {
     openUploadWidget: (
-      options: any,
-      callback: (error: Error | null, result: any) => void
+      options: CloudinaryUploadWidgetOptions,
+      callback: (error: Error | null, result: CloudinaryUploadWidgetResults) => void
     ) => void;
   };
 }
@@ -20,12 +21,6 @@ declare global {
 interface ImageUploadProps {
   onChange: (value: string) => void;
   value: string;
-}
-
-interface CloudinaryUploadResult {
-  info: {
-    secure_url: string;
-  };
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = ({ onChange, value }) => {
@@ -42,26 +37,46 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onChange, value }) => {
     [onChange]
   );
 
+  const uploadOptions: CloudinaryUploadWidgetOptions = {
+    maxFiles: 1,
+    multiple: false,
+    resourceType: "image",
+    // sources: ["local", "camera"], // Optional: Explicitly set allowed sources
+  };
+
   return (
     <CldUploadWidget
       onSuccess={handleUpload}
       uploadPreset="airbnb"
-      options={{
-        maxFiles: 1,
-      }}
+      options={uploadOptions}
     >
       {({ open }) => {
         return (
           <div
-            className="relative cursor-pointer hover:opacity-70 transition border-dashed border-2 p-20 border-neutral-300 flex flex-col justify-center items-center gap-4 text-neutral-600"
             onClick={() => open?.()}
+            className="
+              relative
+              cursor-pointer
+              hover:opacity-70
+              transition
+              border-dashed
+              border-2
+              p-20
+              border-neutral-300
+              flex
+              flex-col
+              justify-center
+              items-center
+              gap-4
+              text-neutral-600
+            "
           >
             <TbPhotoPlus size={50} />
-            <div className="font-semibold text-lg">Click to Upload</div>
+            <div className="font-semibold text-lg">Click to upload</div>
             {value && (
               <div className="absolute inset-0 w-full h-full">
                 <Image
-                  alt="upload"
+                  alt="Upload"
                   fill
                   style={{ objectFit: "cover" }}
                   src={value}
@@ -74,4 +89,5 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onChange, value }) => {
     </CldUploadWidget>
   );
 };
+
 export default ImageUpload;
