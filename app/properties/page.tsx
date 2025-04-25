@@ -15,7 +15,7 @@ export default async function Page(){
     )
   }
 
-  const listings = await getListings(Promise.resolve({
+  const listings = await getListings(({
     userId: currentUser.id
   }))
 
